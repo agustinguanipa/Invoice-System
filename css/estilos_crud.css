@@ -15,7 +15,7 @@ body {
   }
 .table-title {        
 	padding-bottom: 15px;
-	background: #FF8800;
+	background: #007E33;
 	color: #fff;
 	padding: 16px 30px;
 	margin: -20px -25px 10px;
@@ -97,6 +97,9 @@ table.table td a.delete {
 table.table td a.restaurar {
   color: #00B916;
 }
+table.table td a.agregar {
+  color: #007E33;
+}
 table.table td i {
   font-size: 19px;
 }
@@ -125,10 +128,10 @@ table.table .avatar {
   color: #666;
 }	
 .pagination li.active a, .pagination li.active a.page-link {
-  background: #FF8800;
+  background: #007E33;;
 }
 .pagination li.active a:hover {        
-  background: #FF8800;
+  background: #007E33;;
 }
 .pagination li.disabled i {
   color: #ccc;
@@ -181,8 +184,8 @@ table.table .avatar {
 	transform: rotateZ(45deg);
 }
 .custom-checkbox input[type="checkbox"]:checked + label:before {
-	border-color: #FF8800;
-	background: #FF8800;
+	border-color: #007E33;;
+	background: #007E33;;
 }
 .custom-checkbox input[type="checkbox"]:checked + label:after {
 	border-color: #fff;

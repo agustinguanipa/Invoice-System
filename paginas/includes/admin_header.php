@@ -1,6 +1,7 @@
 <?php
   if (session_status() == PHP_SESSION_NONE) {
       session_start();
+      $login = '../'.$_SESSION['foto'];
   }
 
   require_once ("conexion.php");
@@ -10,8 +11,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <title>Panel de Control | Consejo Comunal Ambrosio Plaza</title>
-  <meta name="description" content="Consejo Comunal Ambrosio Plaza | Comunidad de Ambrosio Plaza, San Cristóbal, Estado Táchira, Venezuela">
+  <title>Panel de Control | Venta de Repuestos Juancho</title>
+  <meta name="description" content="Venta de Repuestos Juancho">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!--- Favicon --->
@@ -59,7 +60,7 @@
     <div class="bg-light border-right" id="sidebar-wrapper">
       <div class="sidebar-heading" align="center">
         <a href="admin_panel.php" style="text-decoration: none;">
-          <img src="../imagen/logo-cc-color.png" width="30" height="30" class="d-inline-block align-top" alt="">
+          <img src="../imagen/logo-vrj.png" width="30" height="30" class="d-inline-block align-top" alt="">
           <span class="menu-collapsed" style="color: #000000; font-size: 14px;">Panel de Control</span>
         </a>
       </div>
@@ -75,53 +76,36 @@
                 <span class="menu-collapsed">Inicio</span>
             </div>
           </a>
-          <a href="noticia_lista.php" aria-expanded="false" class="bg-light text-dark list-group-item list-group-item-action flex-column align-items-start tamano-elemento-sidebar">
+          <a href="usuario_lista.php" aria-expanded="false" class="bg-light text-dark list-group-item list-group-item-action flex-column align-items-start tamano-elemento-sidebar">
             <div class="d-flex w-100 justify-content-start align-items-center">
-                <span class="fa fa-newspaper fa-fw mr-3"></span> 
-                <span class="menu-collapsed">Noticias</span>
+                <span class="fa fa-user fa-fw mr-3"></span> 
+                <span class="menu-collapsed">Usuarios</span>
             </div>
           </a>
-          <a href="persona_lista.php" aria-expanded="false" class="bg-light text-dark list-group-item list-group-item-action flex-column align-items-start tamano-elemento-sidebar">
+          <a href="cliente_lista.php" aria-expanded="false" class="bg-light text-dark list-group-item list-group-item-action flex-column align-items-start tamano-elemento-sidebar">
             <div class="d-flex w-100 justify-content-start align-items-center">
                 <span class="fa fa-users fa-fw mr-3"></span> 
-                <span class="menu-collapsed">Personas</span>
+                <span class="menu-collapsed">Clientes</span>
             </div>
           </a>
-          <a href="#submenu1" data-toggle="collapse" aria-expanded="false" class="bg-light text-dark list-group-item list-group-item-action flex-column align-items-start tamano-elemento-sidebar">
-              <div class="d-flex w-100 justify-content-start align-items-center">
-                <span class="fa fa-table fa-fw mr-3"></span> 
-                <span class="menu-collapsed">Registros</span>
-                <span class="fa fa-caret-down ml-auto"></span>
-              </div>
-          </a>
-            <!-- Submenu -->
-            <div id='submenu1' class="collapse sidebar-submenu">
-              <a href="#" class="list-group-item list-group-item-action bg-light text-dark">
-                <span class="menu-collapsed">Pasantías</span>
-              </a>
-              <a href="#" class="list-group-item list-group-item-action bg-light text-dark">
-                <span class="menu-collapsed">TEG</span>
-              </a>
-              <a href="#" class="list-group-item list-group-item-action bg-light text-dark">
-                <span class="menu-collapsed">Categorías</span>
-              </a>
+          <a href="producto_lista.php" aria-expanded="false" class="bg-light text-dark list-group-item list-group-item-action flex-column align-items-start tamano-elemento-sidebar">
+            <div class="d-flex w-100 justify-content-start align-items-center">
+                <span class="fa fa-boxes fa-fw mr-3"></span> 
+                <span class="menu-collapsed">Productos</span>
             </div>
-          <a href="#submenu2" data-toggle="collapse" aria-expanded="false" class="bg-light text-dark list-group-item list-group-item-action flex-column align-items-start tamano-elemento-sidebar">
-              <div class="d-flex w-100 justify-content-start align-items-center">
+          </a>
+          <a href="venta_lista.php" aria-expanded="false" class="bg-light text-dark list-group-item list-group-item-action flex-column align-items-start tamano-elemento-sidebar">
+            <div class="d-flex w-100 justify-content-start align-items-center">
+                <span class="fa fa-money-bill-alt fa-fw mr-3"></span> 
+                <span class="menu-collapsed">Ventas</span>
+            </div>
+          </a>
+          <a href="admin_configuracion.php" aria-expanded="false" class="bg-light text-dark list-group-item list-group-item-action flex-column align-items-start tamano-elemento-sidebar">
+            <div class="d-flex w-100 justify-content-start align-items-center">
                 <span class="fa fa-cogs fa-fw mr-3"></span> 
-                <span class="menu-collapsed">Administración</span>
-                <span class="fa fa-caret-down ml-auto"></span>
-              </div>
-          </a>
-            <!-- Submenu -->
-            <div id='submenu2' class="collapse sidebar-submenu">
-              <a href="#" class="list-group-item list-group-item-action bg-light text-dark">
-                <span class="menu-collapsed">Administradores</span>
-              </a>
-              <a href="./admin_configuracion.php" class="list-group-item list-group-item-action bg-light text-dark">
                 <span class="menu-collapsed">Configuración</span>
-              </a>
             </div>
+          </a>
         </ul>
       </div>
     </div>
@@ -129,7 +113,7 @@
 
     <!-- Page Content -->
     <div id="page-content-wrapper">
-      <nav class="navbar navbar-expand-lg navbar-light border-bottom deep-orange">
+      <nav class="navbar navbar-expand-lg navbar-light border-bottom deep-green">
         <button class="btn btn-light" id="menu-toggle"><i class="fa fa-bars"></i></button>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -141,7 +125,7 @@
                 <a class="nav-link" style="color: #FFFFFF;">San Cristobal, <?php echo fechaC(); ?></a>
               </li>
               <li class="nav-item active">
-                <a class="nav-link" href="../index.php" style="color: #FFFFFF;"><i class="fa fa-home"></i> Bienvenido <?php echo $_SESSION['nombr_per']; ?> <?php echo $_SESSION['apeli_per']; ?></a>
+                <a class="nav-link" href="../index.php" style="color: #FFFFFF;"><i class="fa fa-home"></i> Bienvenido <?php echo $_SESSION['nombre']; ?></a>
               </li>
               <li class="nav-item active">
                 <a class="nav-link" href="usuario_salir.php" style="color: #FFFFFF;"><i class="fa fa-sign-out-alt"></i> Cerrar Sesión</a>

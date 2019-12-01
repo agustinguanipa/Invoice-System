@@ -87,7 +87,7 @@
   justify-content: flex-end;
 }
 .paginador a, .pageSelected{
-  color: #FF8800;
+  color: #007E33;
   border: 1px solid #ddd;
   padding: 5px;
   display: inline-block;
@@ -99,9 +99,9 @@
   background: #ddd;
 }
 .pageSelected{
-  background: #FF8800;
+  background: #007E33;
   color: #FFF;
-  border: 1px solid #FF8800;
+  border: 1px solid #007E33;
 }
 /* Buscador */
 .form_search{
@@ -116,7 +116,7 @@
   border-radius: 10px;
 }
 .form_search .btn_search{
-  background: #FF8800;
+  background: #007E33;
   color: #fff;
   padding: 10px;
   border: 0;
