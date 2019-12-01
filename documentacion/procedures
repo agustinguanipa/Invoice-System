@@ -1,0 +1,167 @@
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `actualizar_precio_producto`(`n_cantidad` INT, `n_precio` DECIMAL(10,2), `codigo` INT)
+BEGIN
+    	DECLARE nueva_existencia int;
+        DECLARE nuevo_total decimal(10,2);
+        DECLARE nuevo_precio decimal(10,2);
+        
+        DECLARE cant_actual int;
+        DECLARE pre_actual decimal(10,2);
+        
+        DECLARE actual_existencia int;
+        DECLARE actual_precio decimal(10,2);
+        
+        SELECT precio, existencia INTO actual_precio, actual_existencia FROM producto WHERE codproducto = codigo;
+        
+        SET nueva_existencia = actual_existencia + n_cantidad;
+        SET nuevo_total = (actual_existencia * actual_precio) + (n_cantidad * n_precio);
+        SET nuevo_precio = nuevo_total / nueva_existencia;
+        
+        UPDATE producto SET existencia = nueva_existencia, precio = nuevo_precio WHERE codproducto = codigo;
+        
+        SELECT nueva_existencia, nuevo_precio;
+       
+	END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `anular_factura`(`no_factura` INT)
+BEGIN
+    	DECLARE existe_factura int;
+        DECLARE registros int;
+        DECLARE a int;
+        
+        DECLARE cod_producto int;
+        DECLARE cant_producto int;
+        DECLARE existencia_actual int;
+        DECLARE nueva_existencia int;
+        
+        SET existe_factura = (SELECT COUNT(*) FROM factura WHERE nofactura = no_factura AND estatus = 1);
+        
+        IF existe_factura > 0 THEN 
+        	
+            CREATE TEMPORARY TABLE tbl_tmp (id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY, cod_prod BIGINT, cant_prod int);
+            
+            SET a = 1;
+            
+            SET registros = (SELECT COUNT(*) FROM detallefactura WHERE nofactura = no_factura);
+            
+            IF registros > 0 THEN 
+            	
+                INSERT INTO tbl_tmp(cod_prod,cant_prod) SELECT codproducto,cantidad FROM detallefactura WHERE nofactura = no_factura;
+                
+                WHILE a <= registros DO
+                	SELECT cod_prod, cant_prod INTO cod_producto,cant_producto FROM tbl_tmp WHERE id = a;
+                    SELECT existencia INTO existencia_actual FROM producto WHERE codproducto = cod_producto;
+                    SET nueva_existencia = existencia_actual + cant_producto;
+                    UPDATE producto SET existencia = nueva_existencia WHERE codproducto = cod_producto;
+                    
+                    SET a = a+1;
+                END WHILE;
+                
+                UPDATE factura SET estatus = 2 WHERE nofactura = no_factura;
+                DROP TABLE tbl_tmp;
+                SELECT * FROM factura WHERE nofactura = no_factura;
+            END IF;
+        ELSE
+        	SELECT 0;
+        END IF;
+        
+	END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `procesar_venta`(IN `cod_usuario` INT, IN `cod_cliente` INT, IN `token` VARCHAR(50))
+BEGIN
+	DECLARE factura INT;
+    
+    DECLARE registros INT;
+    DECLARE total decimal(10,2);
+    
+    DECLARE nueva_existencia int;
+    DECLARE existencia_actual int;
+    
+    DECLARE tmp_cod_producto int;
+    DECLARE tmp_cant_producto int;
+    DECLARE a INT;
+    SET a = 1;
+    
+    CREATE TEMPORARY TABLE tbl_tmp_tokenuser (id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY, cod_prod BIGINT, cant_prod int);
+    SET registros = (SELECT COUNT(*) FROM detalle_temp WHERE token_user = token);
+    
+    IF registros > 0 THEN
+    	INSERT INTO tbl_tmp_tokenuser(cod_prod,cant_prod) SELECT codproducto,cantidad FROM detalle_temp WHERE token_user = token;
+        
+        INSERT INTO factura(usuario,codcliente) VALUES(cod_usuario, cod_cliente);
+        SET factura = LAST_INSERT_ID();
+        
+        INSERT INTO detallefactura(nofactura,codproducto,cantidad,precio_venta) SELECT (factura) as nofactura, codproducto,cantidad,precio_venta FROM detalle_temp WHERE token_user = token;
+        
+        WHILE a <= registros  DO 
+        	SELECT cod_prod,cant_prod INTO tmp_cod_producto,tmp_cant_producto FROM tbl_tmp_tokenuser WHERE id = a;
+            SELECT existencia INTO existencia_actual FROM producto WHERE codproducto = tmp_cod_producto;
+            
+            SET nueva_existencia = existencia_actual - tmp_cant_producto;
+            UPDATE producto SET existencia = nueva_existencia WHERE codproducto = tmp_cod_producto;
+            
+            SET a=a+1;
+            
+        END WHILE;
+        
+        SET total = (SELECT sum(cantidad * precio_venta) FROM detalle_temp WHERE token_user = token);
+        UPDATE factura SET totalfactura = total WHERE nofactura = factura;
+        DELETE FROM detalle_temp WHERE token_user = token;
+        TRUNCATE TABLE tbl_tmp_tokenuser;
+        SELECT * FROM factura WHERE nofactura = factura;
+        
+     ELSE
+     	
+        SELECT 0;
+        
+     END IF;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `dataDashboard`()
+BEGIN
+	DECLARE usuarios int;
+    DECLARE clientes int;
+    DECLARE proveedores int;
+    DECLARE productos int;
+    DECLARE ventas int;
+    
+    SELECT COUNT(*) INTO usuarios FROM usuario WHERE estatus != 10;
+    SELECT COUNT(*) INTO clientes FROM cliente WHERE estatus != 10;
+    SELECT COUNT(*) INTO proveedores FROM proveedor WHERE estatus != 10;
+    SELECT COUNT(*) INTO productos FROM producto WHERE estatus != 10;
+    SELECT COUNT(*) INTO ventas FROM factura WHERE estatus != 10;
+    
+    SELECT usuarios, clientes, proveedores, productos, ventas;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `del_detalle_temp`(`id_detalle` INT, `token` VARCHAR(50))
+BEGIN
+	DELETE FROM detalle_temp WHERE correlativo = id_detalle;
+    
+    SELECT tmp.correlativo, tmp.codproducto,p.descripcion,tmp.cantidad,tmp.precio_venta FROM detalle_temp tmp INNER JOIN producto p ON tmp.codproducto = p.codproducto WHERE tmp.token_user = token;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_detalle_temp`(IN `codigo` INT, IN `cantidad` INT, IN `token_user` VARCHAR(50))
+BEGIN
+    	
+	DECLARE precio_actual decimal(10,2);
+    SELECT precio INTO precio_actual FROM producto WHERE codproducto = codigo;
+        
+    INSERT INTO detalle_temp(token_user,codproducto,cantidad,precio_venta) VALUES(token_user,codigo,cantidad,precio_actual);
+        
+    SELECT tmp.correlativo,tmp.codproducto,p.descripcion,tmp.cantidad,tmp.precio_venta FROM detalle_temp tmp
+    INNER JOIN producto p
+    ON tmp.codproducto = p.codproducto
+    WHERE tmp.token_user = token_user;
+END$$
+DELIMITER ;
