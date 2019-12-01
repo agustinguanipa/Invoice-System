@@ -7,6 +7,14 @@
   }
 ?>
 
+<?php 
+	$busqueda = strtolower($_REQUEST['busqueda']);
+	if (empty($busqueda)) {
+		header('location: usuario_lista.php');
+		mysqli_close($conexion);
+	}
+?>
+
 <div class="container-fluid">
 	<div class="table-wrapper">
 	    <div class="table-title">
@@ -50,11 +58,17 @@
 							
 						//Paginador 
 
-							$sql_registe = mysqli_query($conexion,"SELECT COUNT(*) as total_registro FROM producto WHERE estatus = 1");
+							$sql_registe = mysqli_query($conexion,"SELECT COUNT(*) as total_registro FROM producto 
+								WHERE (codproducto LIKE '%$busqueda%' OR 
+									descripcion LIKE '%$busqueda%' OR 
+									precio LIKE '%$busqueda%' OR 
+									existencia LIKE '%$busqueda%') 
+									AND estatus = 1");
+							
 							$result_registe = mysqli_fetch_array($sql_registe);
 							$total_registro = $result_registe['total_registro'];
 
-							$por_pagina = 5;
+							$por_pagina = 30;
 
 							if (empty($_GET['pagina'])) 
 							{
@@ -67,7 +81,12 @@
 							$desde = ($pagina-1) * $por_pagina;
 							$total_paginas = ceil($total_registro / $por_pagina);
 
-						$query = mysqli_query($conexion,"SELECT codproducto, descripcion, precio, existencia, foto FROM producto WHERE estatus = 1 ORDER BY codproducto DESC LIMIT $desde,$por_pagina");
+							$query = mysqli_query($conexion,"SELECT * FROM producto WHERE 
+								( codproducto LIKE '%$busqueda%' OR 
+								descripcion LIKE '%$busqueda%' OR 
+								precio LIKE '%$busqueda%' OR 
+								existencia LIKE '%$busqueda%') 
+								AND estatus = 1  ORDER BY codproducto ASC LIMIT $desde,$por_pagina");
 							mysqli_close($conexion);
 							$result = mysqli_num_rows($query);
 

@@ -12,7 +12,7 @@
 	    <div class="table-title">
 	        <div class="row">
             <div class="col-sm-6">
-							<h2>Administrar <b>Usuarios</b></h2>
+							<h2>Administrar <b>Clientes</b></h2>
 						</div>
 						<div class="col-sm-6">
 							<a href="usuario_lista.php" class="btn btn-light text-dark"><i class="fa fa-users"></i> Usuarios Activos</a>

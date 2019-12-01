@@ -7,24 +7,32 @@
   }
 ?>
 
+<?php 
+	$busqueda = strtolower($_REQUEST['busqueda']);
+	if (empty($busqueda)) {
+		header('location: usuario_lista.php');
+		mysqli_close($conexion);
+	}
+?>
+
 <div class="container-fluid">
 	<div class="table-wrapper">
 	    <div class="table-title">
 	        <div class="row">
             <div class="col-sm-6">
-							<h2>Administrar <b>Productos</b></h2>
+							<h2>Administrar <b>Usuarios</b></h2>
 						</div>
 						<div class="col-sm-6">
-							<a href="producto_lista.php" class="btn btn-light text-dark"><i class="fa fa-users"></i> Productos Activos</a>
-							<a href="producto_lista_inactivo.php" class="btn btn-light text-dark"><i class="fa fa-trash"></i> Productos Inactivos</a>
+							<a href="usuario_lista.php" class="btn btn-light text-dark"><i class="fa fa-users"></i> Usuarios Activos</a>
+							<a href="usuario_lista_inactivo.php" class="btn btn-light text-dark"><i class="fa fa-trash"></i> Usuarios Inactivos</a>
 						</div>
 	        </div>
 	    </div>
 	    <div class="row" style="padding-top: 2px;">
 	    	<div class="col-sm-8">
-					<a href="producto_registro.php" class="btn btn-info float-left"><i class="fa fa-plus"></i> Registrar Producto</a>
+					<a href="usuario_registro.php" class="btn btn-info float-left"><i class="fa fa-plus"></i> Registrar Usuario</a>
 				</div>
-				<form action="producto_buscar.php" method="GET" class="col-sm-4" style="padding-top: 1px;">
+				<form action="usuario_buscar.php" method="GET" class="col-sm-4" style="padding-top: 1px;">
 					<div class="input-group">			
 						<input type="text" class="form-control" name="busqueda" id="busqueda" placeholder="Buscar">
 						<div class="input-group-append">
@@ -40,21 +48,41 @@
 						<tr>
 							<th class='text-center'>#</th>
 							<th class='text-center'>Nombre</th>
-							<th class='text-center'>Precio</th>
-							<th class='text-center'>Existencia</th>
-							<th class='text-center'>Ver</th>
+							<th class='text-center'>Correo</th>
+							<th class='text-center'>Usuario</th>
+							<th class='text-center'>Tipo</th>
 							<th class='text-center'>Editar</th>
 							<th class='text-center'>Borrar</th>
 						</tr>
 						<?php 
 							
-						//Paginador 
+							// Paginador
 
-							$sql_registe = mysqli_query($conexion,"SELECT COUNT(*) as total_registro FROM producto WHERE estatus = 1");
+							$rol = '';
+							if ($busqueda == 'ADMINISTRADOR') 
+							{
+								$rol = " OR rol LIKE '%1%' ";
+
+							}else if ($busqueda == 'GERENTE') 
+								{
+									$rol = " OR rol LIKE '%2%' ";
+
+								}else if ($busqueda == 'VENDEDOR') 
+									{
+										$rol = " OR rol LIKE '%3%' ";
+									} 
+							$sql_registe = mysqli_query($conexion,"SELECT COUNT(*) as total_registro FROM usuario 
+								WHERE (idusuario LIKE '%$busqueda%' OR 
+									nombre LIKE '%$busqueda%' OR 
+									correo LIKE '%$busqueda%' OR 
+									usuario LIKE '%$busqueda%' 
+									$rol) 
+									AND estatus = 1");
+							
 							$result_registe = mysqli_fetch_array($sql_registe);
 							$total_registro = $result_registe['total_registro'];
 
-							$por_pagina = 5;
+							$por_pagina = 30;
 
 							if (empty($_GET['pagina'])) 
 							{
@@ -67,28 +95,39 @@
 							$desde = ($pagina-1) * $por_pagina;
 							$total_paginas = ceil($total_registro / $por_pagina);
 
-						$query = mysqli_query($conexion,"SELECT codproducto, descripcion, precio, existencia, foto FROM producto WHERE estatus = 1 ORDER BY codproducto DESC LIMIT $desde,$por_pagina");
+							$query = mysqli_query($conexion,"SELECT u.idusuario, u.nombre, u.correo, u.usuario, r.rol FROM usuario u INNER JOIN rol r ON u.rol = r.idrol WHERE 
+								( u.idusuario LIKE '%$busqueda%' OR 
+								u.nombre LIKE '%$busqueda%' OR 
+								u.correo LIKE '%$busqueda%' OR 
+								u.usuario LIKE '%$busqueda%' OR 
+								r.rol LIKE '%$busqueda%' ) 
+								AND estatus = 1  ORDER BY u.idusuario ASC LIMIT $desde,$por_pagina");
 							mysqli_close($conexion);
 							$result = mysqli_num_rows($query);
 
 							if ($result > 0) {
 							 	while ($data = mysqli_fetch_array($query)) {
-
+							 		
 							 		?>
 
-							 		<tr class="row<?php echo $data['codproducto']; ?>">
-										<td class="text-center"><?php echo $data['codproducto']; ?></td>
-										<td class="text-center"><?php echo $data['descripcion']; ?></td>
-										<td class="text-center"><?php echo $data['precio']; ?></td>
-										<td class="text-center"><?php echo $data['existencia']; ?></td>
+							 		<tr>
+										<td class="text-center"><?php echo $data['idusuario']; ?></td>
+										<td class="text-center"><?php echo $data['nombre']; ?></td>
+										<td class="text-center"><?php echo $data['correo']; ?></td>
+										<td class="text-center"><?php echo $data['usuario']; ?></td>
+										<td class="text-center"><?php echo $data['rol']; ?></td>
 										<td class='text-center'>
-											<a href="producto_ver.php?id=<?php echo $data['codproducto']; ?>" class="look"><i class="fa fa-plus"></i></a>
+											<a href="usuario_editar.php?id=<?php echo $data['idusuario']; ?>" class="edit"><i class="fa fa-edit"></i></a>
 										</td>
 										<td class='text-center'>
-											<a href="producto_editar.php?id=<?php echo $data['codproducto']; ?>" class="edit"><i class="fa fa-edit"></i></a>
-										</td>
-										<td class='text-center'>
-											<a href="producto_borrar.php?id=<?php echo $data['codproducto']; ?>" class="delete eliminar"><i class="fa fa-trash-alt"></i></a>
+											<?php  
+												if ($data['idusuario'] != 1) {
+												?>
+													<a href="usuario_borrar.php?id=<?php echo $data['idusuario']; ?>" class="delete eliminar"><i class="fa fa-trash-alt"></i></a>
+													
+												<?php	
+												}
+											?>
 										</td>
 									</tr>
 

@@ -3,7 +3,7 @@
 $host = 'localhost';
 $user = 'root';
 $pw = 'root';
-$bd = 'Facturacion';
+$bd = 'venrepjua';
 
 $conexion = @mysqli_connect($host,$user,$pw,$bd);
 
