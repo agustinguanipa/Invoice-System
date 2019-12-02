@@ -42,7 +42,6 @@
 							<th class='text-center'>Nombre</th>
 							<th class='text-center'>Precio</th>
 							<th class='text-center'>Existencia</th>
-							<th class='text-center'>Ver</th>
 							<th class='text-center'>Editar</th>
 							<th class='text-center'>Borrar</th>
 						</tr>
@@ -81,9 +80,6 @@
 										<td class="text-center"><?php echo $data['descripcion']; ?></td>
 										<td class="text-center"><?php echo $data['precio']; ?></td>
 										<td class="text-center"><?php echo $data['existencia']; ?></td>
-										<td class='text-center'>
-											<a href="producto_ver.php?id=<?php echo $data['codproducto']; ?>" class="look"><i class="fa fa-plus"></i></a>
-										</td>
 										<td class='text-center'>
 											<a href="producto_editar.php?id=<?php echo $data['codproducto']; ?>" class="edit"><i class="fa fa-edit"></i></a>
 										</td>
