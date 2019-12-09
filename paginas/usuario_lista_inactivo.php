@@ -1,10 +1,14 @@
-<?php 
-	require_once('includes/admin_header.php');
+<?php
+  session_start();
 
-	if (!isset($_SESSION['active'])) {
+  if (!isset($_SESSION['active'])) {
     header('Location: ../index.php');
     exit();
   }
+?>
+
+<?php 
+	require_once('includes/admin_header.php');
 ?>
 
 <div class="container-fluid">
@@ -75,7 +79,13 @@
 										<td class="text-center"><?php echo $data['usuario']; ?></td>
 										<td class="text-center"><?php echo $data['rol']; ?></td>
 										<td class='text-center'>
+											<?php  
+												if ($data['rol'] != 'ADMINISTRADOR' && ($_SESSION['rol'] == 1 || $_SESSION['rol'] == 2)) {
+												?>
 											<a href="usuario_restaurar.php?id=<?php echo $data['idusuario']; ?>" class="restaurar"><i class="fa fa-check"></i></a>
+											<?php	
+													}
+												?>
 										</td>
 									</tr>
 

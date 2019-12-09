@@ -4,6 +4,9 @@
 	<meta charset="UTF-8">
 	<title>Reporte De Ventas</title>
     <link rel="stylesheet" href="style.css">
+    <!--- Bootstrap 4 --->
+  <link rel="stylesheet" href="../libs/bootstrap-4.1.3-dist/css/bootstrap.min.css"/>
+  <script src="../../libs/bootstrap-4.1.3-dist/js/bootstrap.min.js"></script>
 </head>
 <body>	
 <div id="page_pdf">
@@ -12,7 +15,7 @@
 		<tr>
 			<td class="logo_factura">
 				<div>
-					<img src="img/logo.png">
+					<img src="img/logo-vrj.png">
 				</div>
 			</td>
 			<td class="info_empresa">
@@ -21,13 +24,16 @@
 					{
 						$iva = $configuracion['iva'];
 					?>
-						<div>
-							<span class="h2"><?php echo strtoupper($configuracion['nombre']); ?></span>
+						<div class="card">
+							<div class="card-body">
+								<span class="h2"><?php echo strtoupper($configuracion['nombre']); ?></span>
 							<p><?php echo $configuracion['razon_social']; ?></p>
 							<p>Registro: v-<?php echo $configuracion['rif']; ?></p>
 							<p>Teléfono: <?php echo $configuracion['telefono']; ?></p>
 							<p>Email: <?php echo $configuracion['email']; ?></p>
 							<p><?php echo $configuracion['direccion']; ?></p>
+							</div>
+							
 						</div>
 					<?php
 					}

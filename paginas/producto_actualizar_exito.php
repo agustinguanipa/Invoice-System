@@ -1,3 +1,12 @@
+<?php
+  session_start();
+
+  if (!isset($_SESSION['active'])) {
+    header('Location: ../index.php');
+    exit();
+  }
+?>
+
 <?php 
 	require_once('includes/admin_header.php');
 ?>
@@ -12,7 +21,7 @@
   				<h2><b>¡El Producto ha sido Actualizado Exitosamente!</b></h2>
 				</div>
 				<div class="card-footer">
-           <a href="producto_lista.php" class="btn btn-info float-right">Ir al Listado <i class="fa fa-arrow-right"></i></a> 
+           <a href="producto_lista.php" class="btn btn-info float-left"><i class="fa fa-arrow-left"></i> Ir al Listado </a> 
 				</div>
     </div> 
   </div>

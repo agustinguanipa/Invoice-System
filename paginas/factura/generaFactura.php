@@ -1,17 +1,12 @@
 <?php
+  session_start();
 
-	//print_r($_REQUEST);
-	//exit;
-	//echo base64_encode('2');
-	//exit;
-	session_start();
-	if (empty($_SESSION['active'])) 
-	{
-		header('location: ../');
-	}
-	
+  if (!isset($_SESSION['active'])) {
+    header('Location: ../index.php');
+    exit();
+  }
 
-	include "../../conexion.php";
+	include "../conexion.php";
 	require_once '../pdf/vendor/autoload.php';
 	use Dompdf\Dompdf;
 

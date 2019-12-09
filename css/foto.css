@@ -1,4 +1,4 @@
-/*fotooooo */
+/* Foto */
 
 .prevPhoto {
     display: flex;
@@ -57,3 +57,38 @@
   top: -10px;
   z-index: 10;
 }
+
+/* Foto Usuario */
+
+.photouser {
+    width: 25px;
+    height: 25px;
+    border-radius: 50px;
+}
+
+.logoUser, .logoEmpresa{
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flex;
+  display: -o-flex;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  margin: 20px auto;
+  padding: 25px;
+  background: #E9E9E9;
+}
+.logoUser img{
+  border-radius: 1000px;
+    width: 135%;
+    height: 135%;
+}
+
+.logoUser, .logoEmpresa{
+    width: 150px;
+    height: 150px;
+  }
+

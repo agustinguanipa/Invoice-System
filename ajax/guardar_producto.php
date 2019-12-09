@@ -16,7 +16,7 @@
 	$type = $foto['type'];
 	$url_temp = $foto['tmp_name'];
 
-	$imgProducto = 'user.png';
+	$imgProducto = 'producto.png';
 
 	if ($nombre_foto != '')
 	{

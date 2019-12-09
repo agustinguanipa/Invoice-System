@@ -1,5 +1,13 @@
-<?php 
+<?php
+  session_start();
 
+  if (!isset($_SESSION['active'])) {
+    header('Location: ../index.php');
+    exit();
+  }
+?>
+
+<?php 
 	require_once('includes/admin_header.php');
 
 	// Datos Empresa
@@ -67,6 +75,9 @@
 		  </div>
 		</div>
 
+		<?php  
+		if ($data['rol'] != 'ADMINISTRADOR' && ($_SESSION['rol'] == 1 || $_SESSION['rol'] == 2)) {
+		?>
 		<div class="card text-center">
 		  <div class="card-header">
 		    <b>Configuración de la Empresa</b>
@@ -134,6 +145,9 @@
 				</div>
 		  </div>
 		</div>
+		<?php	
+			}
+		?>
 
 		<div class="card text-center">
 			<div class="card-header">

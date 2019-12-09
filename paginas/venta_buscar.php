@@ -1,14 +1,18 @@
-<?php 
-	require_once('includes/admin_header.php');
+<?php
+  session_start();
 
-	if (!isset($_SESSION['active'])) {
+  if (!isset($_SESSION['active'])) {
     header('Location: ../index.php');
     exit();
   }
 ?>
 
 <?php 
-$busqueda = '';
+	require_once('includes/admin_header.php');
+?>
+
+<?php 
+	$busqueda = '';
 	$fecha_de = '';
 	$fecha_a = '';
 

@@ -9,8 +9,10 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Factura</title>
+	<title>Factura | Venta de Repuestos Juancho</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../libs/bootstrap-4.1.3-dist/css/bootstrap.min.css"/>
+  <script src="../../libs/bootstrap-4.1.3-dist/js/bootstrap.min.js"></script>
 </head>
 <body>
 <?php echo $anulada; ?>
@@ -20,7 +22,7 @@
 		<tr>
 			<td class="logo_factura">
 				<div>
-					<img src="img/logo.png">
+					<img src="img/logo-vrj-fav.png" width="180px">
 				</div>
 			</td>
 			<td class="info_empresa" colspan="2">
@@ -29,12 +31,12 @@
 					{
 						$iva = $configuracion['iva'];
 					?>
-						<div>
+						<div class="card">
 							<span class="h2"><?php echo strtoupper($configuracion['nombre']); ?></span>
 							<p><?php echo $configuracion['razon_social']; ?></p>
-							<p>Registro: v-<?php echo $configuracion['rif']; ?></p>
-							<p>Teléfono: <?php echo $configuracion['telefono']; ?></p>
-							<p>Email: <?php echo $configuracion['email']; ?></p>
+							<p><b>Registro: </b>V-<?php echo $configuracion['rif']; ?></p>
+							<p><b>Teléfono: </b><?php echo $configuracion['telefono']; ?></p>
+							<p><b>Email: </b><?php echo $configuracion['email']; ?></p>
 							<p><?php echo $configuracion['direccion']; ?></p>
 						</div>
 					<?php
@@ -42,12 +44,16 @@
 				 	?>
 			</td>
 			<td class="info_factura">
-				<div class="round">
-					<span class="h3">Factura</span>
-					<p>No. Factura: <strong><?php echo $factura['nofactura']; ?></strong></p>
-					<p>Fecha: <?php echo $factura['fecha']; ?></p>
-					<p>Hora: <?php echo $factura['hora']; ?></p>
-					<p>Facturador: <?php echo $factura['vendedor']; ?></p>
+				<div class="card">
+					<div class="card-header">
+						<span class="h3">Factura</span>
+					</div>
+					<div class="card-body">
+						<p><b>No. Factura: </b><strong><?php echo $factura['nofactura']; ?></strong></p>
+						<p><b>Fecha: </b><?php echo $factura['fecha']; ?></p>
+						<p>Hora: <?php echo $factura['hora']; ?></p>
+						<p>Facturador: <?php echo $factura['vendedor']; ?></p>
+					</div>
 				</div>
 			</td>
 		</tr>
@@ -57,9 +63,12 @@
 	<table id="factura_cliente">
 		<tr>
 			<td class="info_cliente">
-				<div class="round">
-					<span class="h3">Cliente</span>
-					<table class="datos_cliente">
+				<div class="card">
+					<div class="card-header">
+						<span class="h3"><b>Cliente</b></span>
+					</div>
+					<div class="card-body<">
+						<table class="datos_cliente">
 						<tr>
 							<td><label>Cedula:</label><p><?php echo $factura['cedula']; ?></p></td>
 							<td><label>Teléfono:</label> <p><?php echo $factura['telefono']; ?></p></td>
@@ -69,9 +78,9 @@
 							<td><label>Dirección:</label> <p><?php echo $factura['direccion']; ?></p></td>
 						</tr>
 					</table>
+					</div>
 				</div>
 			</td>
-
 		</tr>
 	</table>
 		<br><br>
@@ -125,8 +134,7 @@
 	</table>
 	<br><br><br><br>
 	<div>
-		<p class="nota">Si usted tiene preguntas sobre esta factura, <br>pongase en contacto con nombre, teléfono y Email</p>
-		<h4 class="label_gracias">¡Gracias por su compra!</h4>
+		<h4 class="label_gracias">¡Gracias por su Compra!</h4>
 	</div>
 
 </div>

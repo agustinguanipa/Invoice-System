@@ -1,10 +1,14 @@
-<?php 
-	require_once('includes/admin_header.php');
+<?php
+  session_start();
 
-	if (!isset($_SESSION['active'])) {
+  if (!isset($_SESSION['active'])) {
     header('Location: ../index.php');
     exit();
   }
+?>
+
+<?php 
+	require_once('includes/admin_header.php');
 ?>
 
 <div class="container-fluid">
@@ -22,7 +26,13 @@
 	    </div>
 	    <div class="row" style="padding-top: 2px;">
 	    	<div class="col-sm-8">
-					<a href="producto_registro.php" class="btn btn-info float-left"><i class="fa fa-plus"></i> Registrar Producto</a>
+	    		<?php  
+						if ($data['rol'] != 'ADMINISTRADOR' && ($_SESSION['rol'] == 1 || $_SESSION['rol'] == 2)) {
+						?>
+							<a href="producto_registro.php" class="btn btn-info float-left"><i class="fa fa-plus"></i> Registrar Producto</a>
+						<?php	
+							}
+						?>
 				</div>
 				<form action="producto_buscar.php" method="GET" class="col-sm-4" style="padding-top: 1px;">
 					<div class="input-group">			
@@ -42,6 +52,7 @@
 							<th class='text-center'>Nombre</th>
 							<th class='text-center'>Precio</th>
 							<th class='text-center'>Existencia</th>
+							<th class='text-center'>Ver</th>
 							<th class='text-center'>Editar</th>
 							<th class='text-center'>Borrar</th>
 						</tr>
@@ -81,10 +92,25 @@
 										<td class="text-center"><?php echo $data['precio']; ?></td>
 										<td class="text-center"><?php echo $data['existencia']; ?></td>
 										<td class='text-center'>
-											<a href="producto_editar.php?id=<?php echo $data['codproducto']; ?>" class="edit"><i class="fa fa-edit"></i></a>
+											<a href="producto_ver.php?id=<?php echo $data['codproducto']; ?>" class="look"><i class="fa fa-eye"></i></a>
 										</td>
 										<td class='text-center'>
+											<?php  
+												if ($data['rol'] != 'ADMINISTRADOR' && ($_SESSION['rol'] == 1 || $_SESSION['rol'] == 2)) {
+												?>
+											<a href="producto_editar.php?id=<?php echo $data['codproducto']; ?>" class="edit"><i class="fa fa-edit"></i></a>
+											<?php	
+													}
+												?>
+										</td>
+										<td class='text-center'>
+											<?php  
+												if ($data['rol'] != 'ADMINISTRADOR' && ($_SESSION['rol'] == 1 || $_SESSION['rol'] == 2)) {
+												?>
 											<a href="producto_borrar.php?id=<?php echo $data['codproducto']; ?>" class="delete eliminar"><i class="fa fa-trash-alt"></i></a>
+											<?php	
+													}
+												?>
 										</td>
 									</tr>
 

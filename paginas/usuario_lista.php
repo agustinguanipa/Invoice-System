@@ -1,10 +1,14 @@
-<?php 
-	require_once('includes/admin_header.php');
+<?php
+  session_start();
 
-	if (!isset($_SESSION['active'])) {
+  if (!isset($_SESSION['active'])) {
     header('Location: ../index.php');
     exit();
   }
+?>
+
+<?php 
+	require_once('includes/admin_header.php');
 ?>
 
 <div class="container-fluid">
@@ -12,7 +16,7 @@
 	    <div class="table-title">
 	        <div class="row">
             <div class="col-sm-6">
-							<h2>Administrar <b>Clientes</b></h2>
+							<h2>Administrar <b>Usuarios</b></h2>
 						</div>
 						<div class="col-sm-6">
 							<a href="usuario_lista.php" class="btn btn-light text-dark"><i class="fa fa-users"></i> Usuarios Activos</a>
@@ -22,7 +26,13 @@
 	    </div>
 	    <div class="row" style="padding-top: 2px;">
 	    	<div class="col-sm-8">
+	    		<?php  
+						if ($data['rol'] != 'ADMINISTRADOR' && ($_SESSION['rol'] == 1 || $_SESSION['rol'] == 2)) {
+						?>
 					<a href="usuario_registro.php" class="btn btn-info float-left"><i class="fa fa-plus"></i> Registrar Usuario</a>
+					<?php	
+						}
+					?>
 				</div>
 				<form action="usuario_buscar.php" method="GET" class="col-sm-4" style="padding-top: 1px;">
 					<div class="input-group">			
@@ -83,17 +93,22 @@
 										<td class="text-center"><?php echo $data['usuario']; ?></td>
 										<td class="text-center"><?php echo $data['rol']; ?></td>
 										<td class='text-center'>
+											<?php  
+												if ($data['rol'] != 'ADMINISTRADOR' && ($_SESSION['rol'] == 1 || $_SESSION['rol'] == 2)) {
+												?>
 											<a href="usuario_editar.php?id=<?php echo $data['idusuario']; ?>" class="edit"><i class="fa fa-edit"></i></a>
+											<?php	
+													}
+												?>
 										</td>
 										<td class='text-center'>
 											<?php  
-												if ($data['idusuario'] != 1) {
+												if ($data['rol'] != 'ADMINISTRADOR' && ($_SESSION['rol'] == 1 || $_SESSION['rol'] == 2)) {
 												?>
 													<a href="usuario_borrar.php?id=<?php echo $data['idusuario']; ?>" class="delete eliminar"><i class="fa fa-trash-alt"></i></a>
-													
 												<?php	
-												}
-											?>
+													}
+												?>
 										</td>
 									</tr>
 

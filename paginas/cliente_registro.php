@@ -1,10 +1,14 @@
-<?php 
-  require_once('includes/admin_header.php');
+<?php
+  session_start();
 
   if (!isset($_SESSION['active'])) {
-    header('Location: cliente_inicio.php');
+    header('Location: ../index.php');
     exit();
   }
+?>
+
+<?php 
+  require_once('includes/admin_header.php');
 ?>
 
 <div class="container col-lg-10">

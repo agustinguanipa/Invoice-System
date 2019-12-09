@@ -18,7 +18,7 @@ p, label, span, table{
 	font-family: 'BrixSansBlack';
 	font-size: 12pt;
 	display: block;
-	background: #0a4661;
+	background: #007E33;
 	color: #FFF;
 	text-align: center;
 	padding: 3px;
@@ -77,7 +77,7 @@ p, label, span, table{
 }
 .round{
 	border-radius: 10px;
-	border: 1px solid #0a4661;
+	border: 1px solid #007E33;
 	overflow: hidden;
 	padding-bottom: 15px;
 }
@@ -89,7 +89,7 @@ p, label, span, table{
 	border-collapse: collapse;
 }
 #factura_detalle thead th{
-	background: #058167;
+	background: #6c757d;
 	color: #FFF;
 	padding: 5px;
 }

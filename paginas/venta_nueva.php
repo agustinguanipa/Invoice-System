@@ -1,10 +1,14 @@
-<?php 
-	require_once('includes/admin_header.php');
+<?php
+  session_start();
 
-	if (!isset($_SESSION['active'])) {
+  if (!isset($_SESSION['active'])) {
     header('Location: ../index.php');
     exit();
   }
+?>
+
+<?php 
+	require_once('includes/admin_header.php');
 ?>
 
 	<div class="container-fluid">

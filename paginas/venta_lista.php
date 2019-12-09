@@ -1,10 +1,14 @@
-<?php 
-	require_once('includes/admin_header.php');
+<?php
+  session_start();
 
-	if (!isset($_SESSION['active'])) {
+  if (!isset($_SESSION['active'])) {
     header('Location: ../index.php');
     exit();
   }
+?>
+
+<?php 
+	require_once('includes/admin_header.php');
 ?>
 
 <div class="container-fluid">
@@ -44,7 +48,7 @@
 							<th class='text-center'>Estado</th>
 							<th class='text-center'>Total</th>
 							<th class='text-center'>Ver</th>
-							<th class='text-center'>Borrar</th>
+							<th class='text-center'>Anular</th>
 						</tr>
 						<?php 
 							
@@ -100,15 +104,14 @@
 											<td class="text-center estado"><?php echo $estado; ?></td>
 										<td class="text-center totalfactura"><?php echo $data['totalfactura']; ?> Bs.</td>
 										<td class='text-center'>
-											<a href="venta_ver.php?id=<?php echo $data['nofactura']; ?>" class="look"><i class="fa fa-eye"></i></a>
+											<a href="venta_ver.php?id=<?php echo $data['nofactura']; ?>" class="btn_view view_factura look" cl="<?php echo $data['codcliente']; ?>" f="<?php echo $data['nofactura']; ?>"><i class="fa fa-eye"></i></a>
 										</td>
 										<td class='text-center'>
 											<?php  
-												if ($data['nofactura'] != 1) {
-												?>
-													<a href="venta_borrar.php?id=<?php echo $data['nofactura']; ?>" class="delete eliminar"><i class="fa fa-trash-alt"></i></a>
-													
-												<?php	
+											if ($data['rol'] != 'ADMINISTRADOR' && ($_SESSION['rol'] == 1 || $_SESSION['rol'] == 2)) {
+											?>
+												<a href="factura_anular.php?id=<?php echo $data['nofactura']; ?>" class="delete"><i class="fa fa-ban"></i></a>
+											<?php	
 												}
 											?>
 										</td>

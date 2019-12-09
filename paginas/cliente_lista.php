@@ -1,10 +1,14 @@
-<?php 
-	require_once('includes/admin_header.php');
+<?php
+  session_start();
 
-	if (!isset($_SESSION['active'])) {
+  if (!isset($_SESSION['active'])) {
     header('Location: ../index.php');
     exit();
   }
+?>
+
+<?php 
+	require_once('includes/admin_header.php');
 ?>
 
 <div class="container-fluid">
@@ -22,7 +26,13 @@
 	    </div>
 	    <div class="row" style="padding-top: 2px;">
 	    	<div class="col-sm-8">
-					<a href="cliente_registro.php" class="btn btn-info float-left"><i class="fa fa-plus"></i> Registrar Cliente</a>
+	    			<?php  
+							if ($data['rol'] != 'ADMINISTRADOR' && ($_SESSION['rol'] == 1 || $_SESSION['rol'] == 2)) {
+							?>
+						<a href="cliente_registro.php" class="btn btn-info float-left"><i class="fa fa-plus"></i> Registrar Cliente</a>
+					<?php	
+						}
+					?>
 				</div>
 				<form action="cliente_buscar.php" method="GET" class="col-sm-4" style="padding-top: 1px;">
 					<div class="input-group">			
@@ -83,17 +93,22 @@
 										<td class="text-center"><?php echo $data['telefono']; ?></td>
 										<td class="text-center"><?php echo $data['direccion']; ?></td>
 										<td class='text-center'>
+											<?php  
+												if ($data['rol'] != 'ADMINISTRADOR' && ($_SESSION['rol'] == 1 || $_SESSION['rol'] == 2)) {
+												?>
 											<a href="cliente_editar.php?id=<?php echo $data['idcliente']; ?>" class="edit"><i class="fa fa-edit"></i></a>
+											<?php	
+													}
+												?>
 										</td>
 										<td class='text-center'>
 											<?php  
-												if ($data['idcliente'] != 1) {
+												if ($data['rol'] != 'ADMINISTRADOR' && ($_SESSION['rol'] == 1 || $_SESSION['rol'] == 2)) {
 												?>
 													<a href="cliente_borrar.php?id=<?php echo $data['idcliente']; ?>" class="delete eliminar"><i class="fa fa-trash-alt"></i></a>
-													
 												<?php	
-												}
-											?>
+													}
+												?>
 										</td>
 									</tr>
 

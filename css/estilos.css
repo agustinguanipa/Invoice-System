@@ -136,3 +136,6 @@ background: linear-gradient(90deg, rgba(143,226,132,1) 0%, rgba(115,186,97,1) 51
   background: #f36a6a;
 }
 
+.notItemOne option:first-child{
+  display: none;
+}

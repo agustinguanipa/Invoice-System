@@ -1,5 +1,14 @@
+<?php
+  session_start();
+
+  if (!isset($_SESSION['active'])) {
+    header('Location: ../index.php');
+    exit();
+  }
+?>
+
 <?php 
-	require_once('includes/admin_header.php');
+  require_once('includes/admin_header.php');
 ?>
 
 <?php 
@@ -17,16 +26,27 @@ if (empty($_GET['id'])) {
 $id = $_GET['id'];
 
 $query_user = mysqli_query($conexion,"SELECT * FROM producto WHERE codproducto = '$id' AND estatus = 1 ");
-	
-$result_user = mysqli_num_rows($query_user);
 
-$data_user = mysqli_fetch_array($query_user);
+$result_user = mysqli_num_rows($query_user);
+	
+$foto = '';
+$classRemove = 'notBlock';
+
+if ($result_user == 0) 
+{
+  header('location: producto_lista.php');
+}else{
+  $data_user = mysqli_fetch_array($query_user);
+  if ($data_user['foto'] != 'producto.png') 
+  {
+    $classRemove = '';
+    $foto = '<img id="img" src="../imagen/uploads/'.$data_user['foto'].'" alt="Producto">';
+  }
 
 $descripcion = $data_user['descripcion'];
 $precio = $data_user['precio'];
 $existencia = $data_user['existencia'];
-
-
+}
 mysqli_close($conexion);
 ?>
 
@@ -34,11 +54,13 @@ mysqli_close($conexion);
   <div class="form-group text-center">
     <div class="card">
     	<div class="card-header">
-			    <b>Editar Productoe</b>
+			    <b>Editar Producto</b>
 			  </div>
 		   	<div class="card-body">
   				<form role="form" id="producto_editar" class="justify-content-center mx-3 my-1" align="center" enctype="multipart/form-data" action="../ajax/editar_producto.php" method="post">
   					<input type="hidden" name="id" id="id" value="<?php echo $id ?>">
+            <input type="hidden" id="foto_actual" name="foto_actual" value="<?php echo $data_user['foto'] ?>">
+            <input type="hidden" id="foto_remove" name="foto_remove" value="<?php echo $data_user['foto'] ?>">
 		        <div class="form-row">
               <div class="col form-group">
                 <label class="form-label" for="descripcion"><b>Nombre: </b></label>
@@ -53,6 +75,24 @@ mysqli_close($conexion);
                 <input type="text" class="form-control" name="existencia" autocomplete="off" id="existencia" value="<?php echo $existencia; ?>" maxlength="45" onkeyup="this.value = this.value.toUpperCase();">
               </div>
 		        </div>
+            <div class="form-row">
+              <div class="col form-group">
+                <div class="photo">
+                      <label class="form-label" for="fotou_usua"><b>Imagen: </b></label>  
+                        <div class="prevPhoto">
+                        <span class="delPhoto <?php $classRemove; ?>">X</span>
+                        <label for="foto"></label>
+                        <?php echo $foto; ?>
+                        </div>
+                        <div class="upimg">
+                        <input type="file" name="foto" id="foto">
+                        </div>
+                        <div id="form_alert"></div>
+                </div>
+                <!-- <label class="form-label" for="fotou_usua"><b>Imagen de Perfil: </b></label>  
+                <input type="file" class="filestyle" id="foto" name="foto" alt="Imagen de Perfil" data-btnClass="btn-primary" accept="image/*"> -->
+              </div>
+            </div>
 		        <div class="form-row">
 		          <div class="col form-group">
 		            <button type="submit" class="btn btn-primary btn-block"><i class="fa fa-user"></i> Actualizar Producto</button>
